@@ -1,0 +1,3 @@
+﻿@using System.Security.Claims
+
+<h1 class="text-center">@((User.Identity?.IsAuthenticated ?? false) ? $"Hello {User.FindFirst(ClaimTypes.Name)?.Value}!" : "Home Page")</h1>

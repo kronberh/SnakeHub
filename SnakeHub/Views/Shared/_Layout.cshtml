@@ -1,0 +1,207 @@
+﻿@using System.Security.Claims
+@{
+    bool isAuth = User.Identity?.IsAuthenticated ?? false;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-icons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SnakeHub.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-dark text-light">
+    <header class="bg-black text-white">
+        <nav class="navbar navbar-expand navbar-dark box-shadow mb-3">
+            <div class="container-fluid flex-nowrap">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">SnakeHub</a>
+                <div class="navbar w-100 justify-content-between">
+                    <ul class="nav nav-tabs flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-fill"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Browse">
+                                <i class="bi bi-search"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="YourProjects">
+                                <i class="bi bi-folder"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Create">
+                                <i class="bi bi-file-earmark-code"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Play">
+                                <i class="bi bi-controller"></i>
+                            </a>
+                        </li>
+                        @if (User.FindFirst(ClaimTypes.Role)?.Value.Equals("admin", StringComparison.OrdinalIgnoreCase) ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
+                                    <i class="bi bi-shield-check"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="navbar-nav btn-group">
+                        @if (isAuth) {
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#user-modal">
+                                <strong>@User.FindFirst(ClaimTypes.Name)?.Value[0]</strong>
+                            </button>
+                            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#logout-modal">
+                                <i class="bi bi-box-arrow-left"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#register-modal">
+                                <i class="bi bi-person-plus-fill"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#login-modal">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="footer bg-black text-white">
+        <div class="container">
+            &copy; 2024 - <a href="https://www.linkedin.com/in/yelyzavetakronberh/" target="_blank" class="text-white">Kronberh Yelyzaveta</a>
+        </div>
+    </footer>
+    @if (isAuth) {
+        <div class="modal fade" id="user-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">@User.FindFirst(ClaimTypes.Name)?.Value</h2>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        @if (string.Compare(User.FindFirst(ClaimTypes.Role)?.Value, "admin", true) == 0)
+                        {
+                            <a asp-controller="Home" asp-action="Admin" class="btn btn-outline-warning">Open Admin Panel</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="logout-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">Logout</h2>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="logout-form" asp-controller="Account" asp-action="Logout" method="post">
+                            <label class="form-label">Do you wish to logout?</label>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="logout-response-container" class="d-flex justify-content-end"></div>
+                        <button type="submit" form="logout-form" class="btn btn-outline-light">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="modal fade" id="register-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">Register</h2>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="register-form" asp-controller="Account" asp-action="Register" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Login</label>
+                                <input name="login" required class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input name="password" required type="password" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input name="confirm-password" required type="password" class="form-control" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="register-response-container" class="d-flex justify-content-end">
+                            Notice: By proceeding you give permission to use Cookies for storing account data.
+                        </div>
+                        <button type="submit" form="register-form" class="btn btn-outline-warning">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="login-modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h2 class="modal-title w-100 text-center">Login</h2>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="login-form" asp-controller="Account" asp-action="Login" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Login</label>
+                                <input name="login" required class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input name="password" required type="password" class="form-control" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="login-response-container" class="d-flex justify-content-end">
+                            Notice: By proceeding you give permission to use Cookies for storing account data.
+                        </div>
+                        <button type="submit" form="login-form" class="btn btn-outline-light">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

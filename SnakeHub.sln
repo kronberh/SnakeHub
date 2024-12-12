@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeHub", "SnakeHub\SnakeHub.csproj", "{B8A0F476-9C65-4317-B104-1934CE053E3C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8A0F476-9C65-4317-B104-1934CE053E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A0F476-9C65-4317-B104-1934CE053E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A0F476-9C65-4317-B104-1934CE053E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A0F476-9C65-4317-B104-1934CE053E3C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E88A76F2-B468-4862-B7FD-932A6DC0C4C5}
+	EndGlobalSection
+EndGlobal

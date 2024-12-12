@@ -1,0 +1,27 @@
+﻿@model IEnumerable<SessionInfo>
+
+<h1 class="text-center">Active sessions</h1>
+<table class="table table-hover table-dark">
+	<thead>
+		<tr>
+			<th>Session id</th>
+			<th>Player count</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (SessionInfo session in Model)
+		{
+			<tr>
+				<td>@session.Id</td>
+				<td>@session.PlayerCount</td>
+				<td>
+					<form asp-controller ="Games" asp-action="Join" method="get">
+						<input type="hidden" name="GameId" value="@session.Id" />
+						<button type="submit" class="btn btn-outline-warning">Join</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

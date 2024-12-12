@@ -1,0 +1,22 @@
+﻿<h1 class="text-center">Play</h1>
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <div class="position-absolute top-50 start-50 translate-middle w-100 d-flex justify-content-evenly align-content-center">
+        <a asp-controller="Home" asp-action="Browse" class="btn btn-lg btn-success">Host</a>
+        <a asp-controller="Games" asp-action="Sessions" class="btn btn-lg btn-warning">Join</a>
+    </div>
+}
+else
+{
+    <h5 class="position-absolute top-50 start-50 translate-middle">
+        You need to
+        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#register-modal">
+            register
+        </button>
+        or
+        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#login-modal">
+            log in
+        </button>
+        to play.
+    </h5>
+}
