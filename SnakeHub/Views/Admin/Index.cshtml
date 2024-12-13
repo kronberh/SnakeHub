@@ -1,0 +1,21 @@
+﻿@model IEnumerable<User>
+
+<h1 class="text-center">Admin panel</h1>
+<h2 class="text-center">Registered users</h2>
+<table class="table table-hover table-dark">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Login</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (User user in Model)
+		{
+			<tr>
+				<td>@user.Id</td>
+				<td>@user.UserName</td>
+			</tr>
+		}
+	</tbody>
+</table>

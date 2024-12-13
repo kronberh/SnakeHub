@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using SnakeHub.Filters;
-using Microsoft.AspNetCore.Authorization;
-using SnakeHub.Models;
 
 namespace SnakeHub.Controllers
 {
@@ -28,13 +26,6 @@ namespace SnakeHub.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Create()
-        {
-            return PartialView();
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> AdminAsync()
         {
             return PartialView();
         }

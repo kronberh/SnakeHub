@@ -54,7 +54,7 @@
                         @if (User.FindFirst(ClaimTypes.Role)?.Value.Equals("admin", StringComparison.OrdinalIgnoreCase) ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Admin">
+                                <a class="nav-link" asp-controller="Admin" asp-action="Index">
                                     <i class="bi bi-shield-check"></i>
                                 </a>
                             </li>

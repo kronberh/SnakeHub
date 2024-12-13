@@ -68,7 +68,6 @@ namespace SnakeHub.Controllers
         }
 
         [SinglePagePartialActionFilter]
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> PlayAsync()
         {
