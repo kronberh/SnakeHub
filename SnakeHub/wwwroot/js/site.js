@@ -123,7 +123,7 @@ function startGameUpdates() {
                 lost = true;
             }
         }
-    }, 1000 / 60);
+    }, 1000 / 30);
 }
 
 function redrawCanvas(gameState) {
