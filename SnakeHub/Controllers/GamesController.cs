@@ -32,10 +32,15 @@ namespace SnakeHub.Controllers
         public async Task<IActionResult> HostAsync(string modeId)
         {
             using HttpClient client = new();
-            HttpResponseMessage response = await client.PostAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:SessionsSlug"]}?playerId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}&modeId={modeId}", null);
+            HttpResponseMessage response = await client.GetAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:UserSessionSlug"]}?userId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}");
+            if (response.IsSuccessStatusCode)
+            {
+                return BadRequest();
+            }
+            response = await client.PostAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:SessionsSlug"]}?playerId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}&modeId={modeId}", null);
             response.EnsureSuccessStatusCode();
             string responseContent = await response.Content.ReadAsStringAsync();
-            return PartialView("Game", new { gameId = responseContent, isHost=  true });
+            return PartialView("Game", new { gameId = responseContent, isHost = true });
         }
 
         [SinglePagePartialActionFilter]
@@ -44,9 +49,37 @@ namespace SnakeHub.Controllers
         public async Task<IActionResult> JoinAsync(string gameId)
         {
             using HttpClient client = new();
-            HttpResponseMessage response = await client.PostAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:JoinGameSlug"]}?gameId={gameId}&playerId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}", null);
+            HttpResponseMessage response = await client.GetAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:UserSessionSlug"]}?userId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}");
+            if (response.IsSuccessStatusCode)
+            {
+                return BadRequest();
+            }
+            response = await client.PostAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:JoinGameSlug"]}?gameId={gameId}&playerId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}", null);
             response.EnsureSuccessStatusCode();
             return PartialView("Game", new { gameId, isHost = false });
+        }
+
+        [SinglePagePartialActionFilter]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> SpectateAsync(string gameId)
+        {
+            return PartialView("Game", new { gameId, isHost = false });
+        }
+
+        [SinglePagePartialActionFilter]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PlayAsync()
+        {
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.GetAsync($"{_configuration["SnakeHubServer:Endpoint"]}{_configuration["SnakeHubServer:UserSessionSlug"]}?userId={User.FindFirst(ClaimTypes.NameIdentifier)!.Value}");
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return PartialView("Game", new { gameId = responseContent, isHost = false });
+            }
+            return PartialView();
         }
 
         [Authorize]

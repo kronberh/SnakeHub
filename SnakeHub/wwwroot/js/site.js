@@ -55,6 +55,7 @@ window.onload = () => {
 
 let intervalId = null;
 let gameId = null;
+let lost = false;
 
 async function startGame(newGameId) {
     document.getElementById('start-game-btn').style.display = 'none';
@@ -68,7 +69,6 @@ async function startGame(newGameId) {
 async function joinGame(newGameId) {
     document.getElementById('join-game-btn').style.display = 'none';
     gameId = newGameId;
-    console.log(newGameId);
     startGameUpdates();
 }
 
@@ -114,12 +114,14 @@ function startGameUpdates() {
         } else {
             clearInterval(intervalId);
         }
-        response = await fetch(`/Games/GetPlayerScore?gameId=${gameId}`);
-        if (response.ok) {
-            const score = await response.json();
-            document.getElementById('score-span').innerText = score;
-        } else {
-            clearInterval(intervalId);
+        if (!lost) {
+            response = await fetch(`/Games/GetPlayerScore?gameId=${gameId}`);
+            if (response.ok) {
+                const score = await response.json();
+                document.getElementById('score-span').innerText = score;
+            } else {
+                lost = true;
+            }
         }
     }, 1000 / 60);
 }

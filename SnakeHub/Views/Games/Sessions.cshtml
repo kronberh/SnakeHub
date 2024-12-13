@@ -1,11 +1,13 @@
-﻿@model IEnumerable<SessionInfo>
+﻿@using SnakeHub.Enums
+@model IEnumerable<SessionInfo>
 
 <h1 class="text-center">Active sessions</h1>
 <table class="table table-hover table-dark">
 	<thead>
 		<tr>
-			<th>Session id</th>
+			<th>Gamemode name</th>
 			<th>Player count</th>
+			<th>Status</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -13,13 +15,24 @@
 		@foreach (SessionInfo session in Model)
 		{
 			<tr>
-				<td>@session.Id</td>
+				<td>@session.Name</td>
 				<td>@session.PlayerCount</td>
+				<td>@session.Status</td>
 				<td>
-					<form asp-controller ="Games" asp-action="Join" method="get">
-						<input type="hidden" name="GameId" value="@session.Id" />
-						<button type="submit" class="btn btn-outline-warning">Join</button>
-					</form>
+					@if (session.Status == SessionStatus.OPEN)
+					{
+						<form asp-controller="Games" asp-action="Join" method="get">
+							<input type="hidden" name="GameId" value="@session.Id" />
+							<button type="submit" class="btn btn-outline-warning">Join</button>
+						</form>
+					}
+					else
+					{
+						<form asp-controller="Games" asp-action="Spectate" method="get">
+							<input type="hidden" name="GameId" value="@session.Id" />
+							<button type="submit" class="btn btn-outline-light">Spectate</button>
+						</form>
+					}
 				</td>
 			</tr>
 		}

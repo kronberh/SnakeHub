@@ -33,12 +33,6 @@ namespace SnakeHub.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Play()
-        {
-            return PartialView();
-        }
-
-        [HttpGet]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> AdminAsync()
         {
